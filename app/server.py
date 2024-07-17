@@ -14,7 +14,13 @@ async def redirect_root_to_docs():
     return RedirectResponse("/docs")
 
 
-add_routes(app, rag_chroma_private_chain, path="/rag-chroma-private")
+add_routes(
+    app,
+    rag_chroma_private_chain,
+    path="/rag-chroma-private",
+    playground_type="default",
+    include_callback_events=False,
+)
 
 if __name__ == "__main__":
     import uvicorn

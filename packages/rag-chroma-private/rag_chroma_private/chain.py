@@ -7,7 +7,10 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.pydantic_v1 import BaseModel
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
-from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+from typing import List, Union, Dict
+from langchain_core.documents import Document
+from langchain_core.messages import HumanMessage, AIMessage
 
 loader = CSVLoader(file_path="/home/vns1311/ai-patent/ai-patent-advisor/packages/rag-chroma-private/docs/sample.csv", source_column="id", metadata_columns=["date","codes","sections"])
 data = loader.load()
@@ -44,7 +47,7 @@ prompt = ChatPromptTemplate.from_template(template)
 # LLM
 # Select the LLM that you downloaded
 ollama_llm = "llama3"
-model = ChatOllama(model=ollama_llm)
+model = ChatOllama(model=ollama_llm, temperature=0)
 
 # RAG chain
 chain = (
@@ -59,5 +62,11 @@ chain = (
 class Question(BaseModel):
     __root__: str
 
+class Output(BaseModel):
+    chat_history: List[Union[HumanMessage, AIMessage]]
+    input: str
+    context: List[Document]
+    answer: str
 
-chain = chain.with_types(input_type=Question)
+
+chain = chain.with_types(input_type=Question, output_type=Output)
