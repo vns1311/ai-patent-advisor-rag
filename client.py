@@ -6,6 +6,7 @@ from langserve import RemoteRunnable
 runner = RemoteRunnable("http://localhost:8000/rag-chroma-private")
 
 def gradio_interface(input_description):
+    print("Calling API for Query...")
     result = runner.invoke(input=input_description)
     print(f"LLM Output: {type(result)}")
     return result

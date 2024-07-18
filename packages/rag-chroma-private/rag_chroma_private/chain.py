@@ -54,7 +54,7 @@ chain = (
     RunnableParallel({"context": retriever, "question": RunnablePassthrough()})
     | prompt
     | model
-    | StrOutputParser()
+    # | StrOutputParser()
 )
 
 
@@ -63,10 +63,10 @@ class Question(BaseModel):
     __root__: str
 
 class Output(BaseModel):
-    chat_history: List[Union[HumanMessage, AIMessage]]
+    # chat_history: List[Union[HumanMessage, AIMessage]]
     input: str
     context: List[Document]
     answer: str
 
 
-chain = chain.with_types(input_type=Question, output_type=Output)
+chain = chain.with_types(output_type=Output)
